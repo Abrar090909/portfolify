@@ -6,13 +6,14 @@ const mongoose = require('mongoose');
  */
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+    const dbUri = process.env.MONGODB_URI || process.env.MONGO_URI;
+    const conn = await mongoose.connect(dbUri, {
       // These options are no longer needed in Mongoose 6+
       // but included for backward compatibility if needed
     });
 
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
-    
+
     // Connection event listeners
     mongoose.connection.on('error', (err) => {
       console.error('❌ MongoDB connection error:', err);
