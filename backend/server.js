@@ -21,8 +21,17 @@ app.use(cors({
     origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
     credentials: true
 }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
+// Log request size before body parsing
+app.use((req, res, next) => {
+    if (req.headers['content-length']) {
+        console.log(`Payload size: ${Math.round(req.headers['content-length'] / 1024)} KB`);
+    }
+    next();
+});
+
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Request logging
 app.use((req, res, next) => {
